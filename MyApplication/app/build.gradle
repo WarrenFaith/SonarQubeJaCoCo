@@ -1,0 +1,63 @@
+plugins {
+    id "org.sonarqube" version "1.2"
+}
+apply plugin: 'com.android.application'
+apply plugin: 'jacoco-android'
+
+apply from: '../sonarqube.gradle'
+
+def APP_VERSION = "1.0.0"
+ext.set('AppVersion', APP_VERSION)
+
+android {
+    compileSdkVersion 23
+    buildToolsVersion "23.0.2"
+
+    defaultConfig {
+        applicationId "com.example.martin.myapplication"
+        minSdkVersion 15
+        targetSdkVersion 23
+        versionCode 1
+        versionName "1.0"
+    }
+
+    buildTypes {
+        debug {
+            testCoverageEnabled true
+        }
+
+        release {
+            testCoverageEnabled false
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    productFlavors {
+        develop {
+
+        }
+    }
+
+    // see for details: http://tools.android.com/tech-docs/unit-testing-support#TOC-Method-...-not-mocked.-
+    testOptions {
+        unitTests.returnDefaultValues = true
+    }
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    testCompile 'junit:junit:4.12'
+    compile 'com.android.support:appcompat-v7:23.1.1'
+    compile 'com.android.support:design:23.1.1'
+}
+
+jacoco {
+    toolVersion = "0.7.5.201505241946"
+}
+
+jacocoAndroidUnitTestReport {
+    csv.enabled false
+    html.enabled true
+    xml.enabled true
+}
